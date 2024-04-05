@@ -15,7 +15,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import RecipesList from '../components/RecipesList';
-
+import UploadPage from './RecipeCreationPage';
 
 function refreshData(value) {
   if (value === 0) {
@@ -23,6 +23,9 @@ function refreshData(value) {
   }
   if (value === 1) {
     return ingredients;
+  }
+  else {
+    return null;
   }
 }
 
@@ -37,6 +40,9 @@ export default function RecipesPage(props) {
   const renderInfo = () => {
     if (props.value === 0) {
       return <RecipesList data={data} />
+    }
+    else if (props.value === 2) {
+      return <UploadPage/>
     }
 
   }

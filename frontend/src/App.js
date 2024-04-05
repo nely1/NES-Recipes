@@ -43,12 +43,13 @@ function App() {
     <Router>
         <Routes>
           <Route path={ROOT} element={<RecipesPage/>} />
-          <Route path={INGREDIENTS} element={<BasicTable/>}/>  
+          <Route path={INGREDIENTS} element={<BasicTable/>}/>   
           <Route path={RECIPE}/>
         </Routes>
       </Router>
     </>
   );
+  // change BasicTable
 }
 
 export default App;

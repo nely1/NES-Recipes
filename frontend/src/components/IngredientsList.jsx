@@ -49,9 +49,7 @@ const rows = [
   createData('Potato', 4),
 ];
 
-export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+export default function IngredientsList(props) {
   const [value, setValue] = React.useState(0);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({

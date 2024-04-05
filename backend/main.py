@@ -6,6 +6,7 @@ from db import db
 from PIL import Image
 import io
 import matplotlib.pyplot as plt
+import base64
 
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
@@ -119,6 +120,7 @@ def make_recipe():
         
     return "Bon appetit"
 
+@app.route("/get-ingredients")
 def get_all_ingredients():
     all_ingredients = []
     for ingredient in db.ingredient.find():
@@ -126,10 +128,12 @@ def get_all_ingredients():
         all_ingredients.append(ingredient)
     return json.dumps(all_ingredients)
 
+@app.route("/get-recipes")
 def get_all_recipes():
     all_recipes = []
     for ingredient in db.recipe.find():
         ingredient["_id"] = str(ingredient["_id"])
+        ingredient['image'] = "NULL"
         all_recipes.append(ingredient)
     return json.dumps(all_recipes)
 

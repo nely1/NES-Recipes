@@ -17,6 +17,8 @@ import Avatar from '@mui/material/Avatar';
 import RecipesList from '../components/RecipesList';
 import IngredientsList from '../components/IngredientsList';
 
+import { getRecipes } from "../actions/recipes";
+
 
 function refreshData(value) {
   if (value == 0) {
@@ -32,8 +34,8 @@ export default function RecipesPage() {
   const [value, setValue] = useState(0);
   const ref = useRef(null);
   const [data, setData] = useState(() => refreshData(value));
-  
-
+  const dispatch = useDispatch();
+  const recipes = useSelector((state) => state?.recipes);
 
   const renderInfo = () => {
     if (value == 0) {
@@ -44,7 +46,15 @@ export default function RecipesPage() {
     }
   
   }
+
+  const displayRecipes = () => {
+    console.log(recipes)
+  }
+
+
+
   useEffect(() => {
+    dispatch(getRecipes());
     ref.current.ownerDocument.body.scrollTop = 0;
     setData(refreshData(value));
   }, [value, setData]);
@@ -54,6 +64,8 @@ export default function RecipesPage() {
       <CssBaseline />
      
       {renderInfo()}
+
+      {displayRecipes()}
       
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation

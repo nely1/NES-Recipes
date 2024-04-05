@@ -66,25 +66,25 @@ def update_ingredient(name = None, amount = None):
     result = db.ingredient.update_one(query, updated_ingredient)
     return json.dumps(ingredient)
 
-@app.route("/image-test")
+@app.route("/post-recipe", methods = ["POST"])
 def insert_recipe():
-    im = Image.open("./duck.jpg")
-    image_bytes = io.BytesIO()
-    im.save(image_bytes, format='JPEG')
+    recipe  = request.get_json()
 
-    ingredients = [{"name": "tomato", "amount": 1}]
-    # Check and insert all ingredients:
-    for ingredient in ingredients:
-        insert_ingredient(ingredient["name"], 0)
-
-    recipe = {
-        'name': "beef",
-        'image': image_bytes.getvalue(),
-        'ingredients': ingredients,
-        'instructions': "1.Season beef \n 2. Cook beef \n 3. Eat beef"
+    query = {
+        "name": recipe["name"]
     }
-    db.recipe.insert_one(recipe)
-    return "Added duck!"
+    
+    found_recipe = db.recipe.find_one(query)
+
+    if not found_recipe:
+        # Check and insert all ingredients:
+        for ingredient in recipe["ingredients"]:
+            insert_ingredient(ingredient["name"], 0)
+        
+        db.recipe.insert_one(recipe)
+        return "Added recipe!"
+
+    return "Recipe Exists"
 
 @app.route("/image-get")
 def show_recipe():

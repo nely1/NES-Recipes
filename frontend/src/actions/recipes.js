@@ -13,9 +13,11 @@ export const getRecipes= () => async (dispatch) => {
 
 export const postRecipes = (name, instructions, selectedFile, ingredients) => async (dispatch) => {
   try {
+    console.log("action being done");
     const recipeObject = {name: name, instructions: instructions, selectedFile: selectedFile, ingredients: ingredients};
-    await api.postRecipes(recipeObject);
-
+    const data =  await api.postRecipes(recipeObject);
+    dispatch({type: "POST_RECIPE", payload:data});
+    
   }
   catch (error) {
     console.log(error.message);

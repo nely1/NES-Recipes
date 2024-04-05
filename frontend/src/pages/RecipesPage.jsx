@@ -41,7 +41,8 @@ export default function RecipesPage() {
     if (value == 0) {
       return <RecipesList data={data}/>
     }
-    if (value ==1) {
+
+    if (value == 1) {
       return <IngredientsList data={data}/>
     }
   

@@ -15,19 +15,64 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import TextField from '@mui/material/TextField';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170, align: 'center'},
+  { id: 'minus', label: '', minWidth: 100, align: 'center' },
   { id: 'amount', label: 'Amount', minWidth: 100, align: 'center' },
+  { id: 'add', label: '', minWidth: 100, align: 'center' },
 
 ];
 
-function createData(name, amount) {
-  return { name, amount};
-}
-
 export default function IngredientsList(props) {
   const [value, setValue] = React.useState(0);
+  const [rows, setRows] = React.useState([]);
+  const [newIngredient, setNewIngredient] = React.useState({ name: '', amount: 0 });
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    // Map initial data to rows when props.data changes
+    setRows(props.data.map(({ name, amount }) => ({ name, amount })));
+  }, [props.data]); // Run this effect whenever props.data changes
+
+
+  const handleAddButtonClick = (index) => {
+    const updatedRows = [...rows];
+    updatedRows[index].amount = parseInt(updatedRows[index].amount, 10) + 1;
+    setRows(updatedRows);
+  };
+
+  const handleMinusButtonClick = (index) => {
+    const updatedRows = [...rows];
+    updatedRows[index].amount = parseInt(updatedRows[index].amount, 10) - 1;
+    setRows(updatedRows);
+  };
+
+
+  const handleAddRow = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = () => {
+    setRows([...rows, newIngredient]);
+    setNewIngredient({ name: '', amount: 0 });
+    setOpen(false);
+  };
+
+  const handleChange = (e) => {
+    setNewIngredient({ ...newIngredient, [e.target.name]: e.target.value });
+  };
 
   const rows = [];
   props.data.forEach(ingredient => {
@@ -74,27 +119,88 @@ export default function IngredientsList(props) {
                 </StyledTableCell>
               ))}
             </StyledTableRow>
+            
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
+          <StyledTableRow>
+              <StyledTableCell colSpan={columns.length} align="center">
+                <button 
+                style={{
+                  padding: '10px 20px', // Adjust padding to increase button size
+                  fontSize: '16px', // Adjust font size to increase text size
+                  fontWeight: 'bold', // Make text bold
+                }}
+                onClick={() => handleAddRow()}>Add Ingredient</button>
+              </StyledTableCell>
+            </StyledTableRow>
+            {rows.map((row, index) => {
                 return (
-                  <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <StyledTableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column) => {
                       const value = row[column.id];
-                      return (
+                      if (column.id == 'add') { 
+                        return (
+                          <StyledTableCell key={column.id} align={column.align}>
+                            <button onClick={() => handleAddButtonClick(index)}>+</button>
+                          </StyledTableCell>
+                        );
+                      } 
+                      else if (column.id == 'minus') { 
+                        return (
+                          <StyledTableCell key={column.id} align={column.align}>
+                            <button onClick={() => handleMinusButtonClick(index)}>-</button>
+                          </StyledTableCell>
+                        );
+                      } 
+                      else {
+                        return (
                         <StyledTableCell key={column.id} align={column.align}>
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
                         </StyledTableCell>
-                      );
+                        );
+                      }
                     })}
                   </StyledTableRow>
                 );
               })}
           </TableBody>
         </Table>
-      </TableContainer>      
+      </TableContainer>     
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Ingredient</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter the name and amount of the new ingredient:
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            value={newIngredient.name}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            id="amount"
+            name="amount"
+            label="Amount"
+            type="number"
+            fullWidth
+            value={newIngredient.amount}
+            onChange={handleChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
+      </Dialog> 
     </Box>
   );
 }

@@ -4,4 +4,8 @@ import axios from "axios";
 const url = "http://localhost:8000"; 
 
 export const getRecipes = () => axios.get(`${url}/get-recipes`);
+
 export const postIngredient = (newIngredient) => axios.post(`${url}/add`, newIngredient)
+
+export const postRecipes = (recipe) => axios.get(`${url}/post-recipe`, recipe);
+

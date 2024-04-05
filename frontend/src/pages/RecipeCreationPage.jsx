@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { postRecipes } from '../actions/recipes';
 
 export default function UploadPage() {
   const [name, setName] = useState('');
   const [instructions, setInstructions] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [ingredients, setIngredients] = useState([{ name: '', amount: '' }]);
+  const dispatch = useDispatch();
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -16,19 +19,31 @@ export default function UploadPage() {
     setIngredients([...ingredients, { name: '', amount: '' }]);
   };
 
+  const getBase64 = (file) =>
+    //https://stackoverflow.com/questions/36280818/how-to-convert-file-to-base64-in-javascript
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
   const handleIngredientChange = (index, key, value) => {
     const newIngredients = [...ingredients];
     newIngredients[index][key] = value;
     setIngredients(newIngredients);
   };
 
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Do something with selectedFile, name, instructions, and ingredients
-    console.log("Name:", name);
-    console.log("Instructions:", instructions);
-    console.log("File:", selectedFile);
-    console.log("Ingredients:", ingredients);
+    try {
+      const imageBase64 = await getBase64(selectedFile);
+      dispatch(postRecipes(name, instructions, imageBase64, ingredients));
+    } catch (error) {
+      // Handle error if any
+      console.error(error);
+    }
   };
 
   return (

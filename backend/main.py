@@ -18,72 +18,106 @@ def flask_mongodb_atlas():
 
 @app.route("/add")
 # @app.route("/insert-one", methods=["POST"])
-def insert_ingredient():
+def insert_ingredient(name = None, amount = None):
+    ## Fetch data from request or function invokation
+    if name is not None and amount is not None:
+        ingredient = {"name": name, "amount": amount}
+    
     # data = request.get_json()
-    data = {"name": "tomato", "quantity": 10}
+    ingredient = {"name": "tomato", "amount": 10}
     
     # Check if ingredient exists
     query = {
-        "name": data["name"]
+        "name": ingredient["name"]
     }
-    found_ingredient =db.ingredient.find_one(query)
+    found_ingredient = db.ingredient.find_one(query)
     
     # Update if it already exists
     if found_ingredient:
-        result = update_ingredient()
-        return "Ingredient already there, updating quantity instead. \n {}".format(result)
+        result = update_ingredient(ingredient["name"], ingredient["amount"])
+        return "Ingredient already there, updating amount instead. \n {}".format(result)
 
-    # Insert ingredient
-    ingredient = {
-        "name": data["name"],
-        "quantity": data["quantity"]
-    }
     db.ingredient.insert_one(ingredient)
     ingredient["_id"] = str(ingredient["_id"])
     return json.dumps(ingredient)
 
 @app.route("/update")
-def update_ingredient():
+def update_ingredient(name = None, amount = None):
+    ## Fetch data from request or function invokation
+    if name is not None and amount is not None:
+        ingredient = {"name": name, "amount": amount}
+    
     # data = request.get_json()
-    data = {"name": "tomato", "quantity": 10}
-    query = {
-        "name": data["name"]
-    }
+    ingredient = {"name": "tomato", "amount": 10}
 
+    query = {
+        "name": ingredient["name"]
+    }
     # Check if the ingredient exists
     found_ingredient = db.ingredient.find_one(query)
     
-    # Insert into database if new ingredient found
+    # Insert into database if it is new ingredient found
     if not found_ingredient:
-        result = insert_ingredient()
+        result = insert_ingredient(ingredient["name"], ingredient["amount"])
         return "Ingredient not found, creating new entry...{}".format(result)
 
     # Update quantities
-    data["quantity"] += found_ingredient["quantity"]
-    updated_ingredient = {"$set": data}
+    ingredient["amount"] += found_ingredient["amount"]
+    updated_ingredient = {"$set": ingredient}
     result = db.ingredient.update_one(query, updated_ingredient)
-    return json.dumps(data)
-
+    return json.dumps(ingredient)
 
 @app.route("/image-test")
 def insert_recipe():
     im = Image.open("./duck.jpg")
     image_bytes = io.BytesIO()
     im.save(image_bytes, format='JPEG')
-    image = {
-        'name': "Duck",
-        'image': image_bytes.getvalue()
+
+    ingredients = [{"name": "tomato", "amount": 1}]
+    # Check and insert all ingredients:
+    for ingredient in ingredients:
+        insert_ingredient(ingredient["name"], 0)
+
+    recipe = {
+        'name': "beef",
+        'image': image_bytes.getvalue(),
+        'ingredients': ingredients,
+        'instructions': "1.Season beef \n 2. Cook beef \n 3. Eat beef"
     }
-    image_id = db.recipe.insert_one(image)
+    db.recipe.insert_one(recipe)
     return "Added duck!"
 
 @app.route("/image-get")
 def show_recipe():
-    image = db.recipe.find_one()
+    query = {
+        "name": "duck"
+    }
+    image = db.recipe.find_one(query)
     pil_img = Image.open(io.BytesIO(image['image']))
     plt.imshow(pil_img)
     plt.show()
     return "Showing duck!"
+
+@app.route("/make-recipe")
+def make_recipe():
+    # Check if there is enough ingredients
+    
+    query = {"name":"beef"}
+    recipe = db.recipe.find_one(query)
+
+    for ingredient in recipe["ingredients"]:
+        query = {
+            "name": ingredient["name"]
+        }
+        result = db.ingredient.find_one(query)
+        if ingredient["amount"] > result["amount"]:
+            return "Insufficient ingredients"
+        
+    # Make the recipe
+    for ingredient in recipe["ingredients"]:
+        update_ingredient(ingredient["name"], -ingredient["amount"])
+        
+    return "Bon appetit"
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)

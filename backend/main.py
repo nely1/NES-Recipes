@@ -24,7 +24,7 @@ def insert_ingredient(name = None, amount = None):
         ingredient = {"name": name, "amount": amount}
     
     # data = request.get_json()
-    ingredient = {"name": "tomato", "amount": 10}
+    ingredient = {"name": "potato", "amount": 10}
     
     # Check if ingredient exists
     query = {
@@ -118,6 +118,20 @@ def make_recipe():
         update_ingredient(ingredient["name"], -ingredient["amount"])
         
     return "Bon appetit"
+
+def get_all_ingredients():
+    all_ingredients = []
+    for ingredient in db.ingredient.find():
+        ingredient["_id"] = str(ingredient["_id"])
+        all_ingredients.append(ingredient)
+    return json.dumps(all_ingredients)
+
+def get_all_recipes():
+    all_recipes = []
+    for ingredient in db.recipe.find():
+        ingredient["_id"] = str(ingredient["_id"])
+        all_recipes.append(ingredient)
+    return json.dumps(all_recipes)
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)

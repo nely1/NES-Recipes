@@ -22,6 +22,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { postIngredient } from "../actions/ingredients";
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170, align: 'center'},
@@ -36,6 +38,7 @@ export default function IngredientsList(props) {
   const [rows, setRows] = React.useState([]);
   const [newIngredient, setNewIngredient] = React.useState({ name: '', amount: 0 });
   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     // Map initial data to rows when props.data changes
@@ -66,9 +69,15 @@ export default function IngredientsList(props) {
 
   const handleSave = () => {
     setRows([...rows, newIngredient]);
+
+    dispatch(postIngredient(newIngredient))
+
     setNewIngredient({ name: '', amount: 0 });
     setOpen(false);
+
   };
+
+
 
   const handleChange = (e) => {
     setNewIngredient({ ...newIngredient, [e.target.name]: e.target.value });

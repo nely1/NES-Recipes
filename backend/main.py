@@ -17,16 +17,14 @@ CORS(app)
 def flask_mongodb_atlas():
     return "Hello World"
 
-@app.route("/add")
-# @app.route("/insert-one", methods=["POST"])
+@app.route("/add", methods = ["POST"] )
 def insert_ingredient(name = None, amount = None):
     ## Fetch data from request or function invokation
     if name is not None and amount is not None:
         ingredient = {"name": name, "amount": amount}
-    
-    # data = request.get_json()
-    ingredient = {"name": "potato", "amount": 10}
-    
+    else:
+        ingredient = request.get_json()
+
     # Check if ingredient exists
     query = {
         "name": ingredient["name"]

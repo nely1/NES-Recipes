@@ -8,11 +8,11 @@ function App() {
   const INGREDIENTS = "/ingredients";
   const RECIPE = "/recipe:id"
 
-  useEffect(() => {
-    fetch("http://localhost:8000/get-all").then(res => res.json()).then(data => {console.log(data)});
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/get-all").then(res => res.json()).then(data => {console.log(data)});
     
-  }
-  ,[])
+  // }
+  // ,[])
 
   return (
     // <div className="App">
@@ -32,11 +32,12 @@ function App() {
     //   </header>
     // </div>
     <>
-    <Routes>
-    <Route path={ROOT} />
-    <Route path={INGREDIENTS}/>  
-    <Route path={RECIPE}/>
-    </Routes></>
+      <Routes>
+        <Route path={ROOT} />
+        <Route path={INGREDIENTS}/>  
+        <Route path={RECIPE}/>
+      </Routes>
+    </>
   );
 }
 

@@ -25,7 +25,7 @@ function refreshData(value) {
     return ingredients;
   }
   else {
-    return null;
+    return [];
   }
 }
 

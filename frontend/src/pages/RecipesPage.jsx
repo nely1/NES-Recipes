@@ -15,6 +15,8 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import RecipesList from '../components/RecipesList';
+import IngredientsList from '../components/IngredientsList';
+import { getRecipes } from "../actions/recipes";
 import UploadPage from './RecipeCreationPage';
 
 function refreshData(value) {
@@ -33,6 +35,9 @@ function refreshData(value) {
 export default function RecipesPage(props) {
   // const [value, setValue] = useState(0);
   const ref = useRef(null);
+
+  const dispatch = useDispatch();
+  const recipes = useSelector((state) => state?.recipes);
   const [data, setData] = useState(() => refreshData(props.value));
   console.log(props.value);
 
@@ -41,12 +46,24 @@ export default function RecipesPage(props) {
     if (props.value === 0) {
       return <RecipesList data={data} />
     }
+     if (value == 1) {
+      return <IngredientsList data={data}/>
+    }
+ 
     else if (props.value === 2) {
       return <UploadPage/>
     }
-
+    
   }
+
+  const displayRecipes = () => {
+    console.log(recipes)
+  }
+
+
+
   useEffect(() => {
+    //dispatch(getRecipes());
     ref.current.ownerDocument.body.scrollTop = 0;
     setData(refreshData(props.value));
   }, [props.value, setData]);
@@ -57,19 +74,10 @@ export default function RecipesPage(props) {
 
       {renderInfo()}
 
-      {/* <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        >
-          <BottomNavigationAction label="Recipes" icon={<RestoreIcon />} value={0}/>
-          <BottomNavigationAction label="Ingredients" icon={<FavoriteIcon />}  value={1}/>
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />}  value={2}/>
-        </BottomNavigation>
-      </Paper> */}
+
+      {displayRecipes()}
+      
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
     </Box>
   );
 }

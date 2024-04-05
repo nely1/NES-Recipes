@@ -55,7 +55,7 @@ export default function RecipesPage() {
 
 
   useEffect(() => {
-    dispatch(getRecipes());
+    //dispatch(getRecipes());
     ref.current.ownerDocument.body.scrollTop = 0;
     setData(refreshData(value));
   }, [value, setData]);

@@ -74,15 +74,6 @@ export default function IngredientsList(props) {
     setNewIngredient({ ...newIngredient, [e.target.name]: e.target.value });
   };
 
-  const rows = [];
-  props.data.forEach(ingredient => {
-    // Extract name and amount properties
-    const { name, amount } = ingredient;
-    
-    // Push an array containing name and amount into rowsAndColumns array
-    rows.push({name, amount});
-});
-
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,

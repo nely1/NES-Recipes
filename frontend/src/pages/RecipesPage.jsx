@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import Box from '@mui/material/Box';
@@ -14,38 +14,43 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import RecipesList from '../components/RecipesList';
 
-function refreshMessages() {
-  const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
-  return Array.from(new Array(50)).map(
-    () => messageExamples[getRandomInt(messageExamples.length)],
-  );
+function refreshData(value) {
+  if (value == 0) {
+    return messageExamples;
+  }
+  if (value == 1) {
+    return ingredients;
+  }
 }
 
-export default function RecipesPage() {
-  const [value, setValue] = React.useState(0);
-  const ref = React.useRef(null);
-  const [messages, setMessages] = React.useState(() => refreshMessages());
 
-  React.useEffect(() => {
+export default function RecipesPage() {
+  const [value, setValue] = useState(0);
+  const ref = useRef(null);
+  const [data, setData] = useState(() => refreshData(value));
+  
+
+
+  const renderInfo = () => {
+    if (value == 0) {
+      return <RecipesList data={data}/>
+    }
+  
+  }
+  useEffect(() => {
     ref.current.ownerDocument.body.scrollTop = 0;
-    setMessages(refreshMessages());
-  }, [value, setMessages]);
+    setData(refreshData(value));
+  }, [value, setData]);
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <CssBaseline />
-      <List>
-        {messages.map(({ primary, secondary, person }, index) => (
-          <ListItemButton key={index + person}>
-            <ListItemAvatar>
-              <Avatar alt="Profile Picture" src={person} />
-            </ListItemAvatar>
-            <ListItemText primary={primary} secondary={secondary} />
-          </ListItemButton>
-        ))}
-      </List>
+     
+      {renderInfo()}
+      
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
           showLabels
@@ -54,15 +59,15 @@ export default function RecipesPage() {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+          <BottomNavigationAction label="Recipes" icon={<RestoreIcon />} value={0}/>
+          <BottomNavigationAction label="Ingredients" icon={<FavoriteIcon />}  value={1}/>
+          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />}  value={2}/>
         </BottomNavigation>
       </Paper>
     </Box>
   );
 }
-
+// layout for ingredients
 const messageExamples = [
   {
     primary: 'Brunch this week?',
@@ -105,3 +110,16 @@ const messageExamples = [
   },
 ];
 
+// layout for ingredients
+const ingredients = [
+    {
+        name: "tomato",
+        amount: 2,
+        person: '/static/images/avatar/1.jpg'
+    },
+    {
+        name: "potato",
+        amount: 4,
+        person: '/static/images/avatar/5.jpg',
+    }
+]

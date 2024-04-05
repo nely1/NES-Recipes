@@ -2,6 +2,7 @@ import {useEffect} from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import RecipesPage from './pages/RecipesPage';
+import BasicTable from "./components/IngredientsList";
 
 function App() {
 
@@ -42,7 +43,7 @@ function App() {
     <Router>
         <Routes>
           <Route path={ROOT} element={<RecipesPage/>} />
-          <Route path={INGREDIENTS}/>  
+          <Route path={INGREDIENTS} element={<BasicTable/>}/>  
           <Route path={RECIPE}/>
         </Routes>
       </Router>

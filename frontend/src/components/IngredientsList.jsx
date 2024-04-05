@@ -26,31 +26,17 @@ function createData(name, amount) {
   return { name, amount};
 }
 
-const rows = [
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-];
-
 export default function IngredientsList(props) {
   const [value, setValue] = React.useState(0);
+
+  const rows = [];
+  props.data.forEach(ingredient => {
+    // Extract name and amount properties
+    const { name, amount } = ingredient;
+    
+    // Push an array containing name and amount into rowsAndColumns array
+    rows.push({name, amount});
+});
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -108,21 +94,7 @@ export default function IngredientsList(props) {
               })}
           </TableBody>
         </Table>
-      </TableContainer>
-
-       <BottomNavigation
-          sx={{position: 'fixed', bottom: 0, right: 0, left:0}}
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        >
-          <BottomNavigationAction label="Recipes" icon={<RestoreIcon />} value={0}/>
-          <BottomNavigationAction label="Ingredients" icon={<FavoriteIcon />}  value={1}/>
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />}  value={2}/>
-        </BottomNavigation>
-      
+      </TableContainer>      
     </Box>
   );
 }

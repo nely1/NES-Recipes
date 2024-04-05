@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -18,40 +18,40 @@ import RecipesList from '../components/RecipesList';
 
 
 function refreshData(value) {
-  if (value == 0) {
+  if (value === 0) {
     return messageExamples;
   }
-  if (value == 1) {
+  if (value === 1) {
     return ingredients;
   }
 }
 
 
-export default function RecipesPage() {
-  const [value, setValue] = useState(0);
+export default function RecipesPage(props) {
+  // const [value, setValue] = useState(0);
   const ref = useRef(null);
-  const [data, setData] = useState(() => refreshData(value));
-  
+  const [data, setData] = useState(() => refreshData(props.value));
+  console.log(props.value);
 
 
   const renderInfo = () => {
-    if (value == 0) {
-      return <RecipesList data={data}/>
+    if (props.value === 0) {
+      return <RecipesList data={data} />
     }
-  
+
   }
   useEffect(() => {
     ref.current.ownerDocument.body.scrollTop = 0;
-    setData(refreshData(value));
-  }, [value, setData]);
+    setData(refreshData(props.value));
+  }, [props.value, setData]);
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <CssBaseline />
-     
+
       {renderInfo()}
-      
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+
+      {/* <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
           showLabels
           value={value}
@@ -63,7 +63,7 @@ export default function RecipesPage() {
           <BottomNavigationAction label="Ingredients" icon={<FavoriteIcon />}  value={1}/>
           <BottomNavigationAction label="Archive" icon={<ArchiveIcon />}  value={2}/>
         </BottomNavigation>
-      </Paper>
+      </Paper> */}
     </Box>
   );
 }
@@ -112,14 +112,14 @@ const messageExamples = [
 
 // layout for ingredients
 const ingredients = [
-    {
-        name: "tomato",
-        amount: 2,
-        person: '/static/images/avatar/1.jpg'
-    },
-    {
-        name: "potato",
-        amount: 4,
-        person: '/static/images/avatar/5.jpg',
-    }
+  {
+    name: "tomato",
+    amount: 2,
+    person: '/static/images/avatar/1.jpg'
+  },
+  {
+    name: "potato",
+    amount: 4,
+    person: '/static/images/avatar/5.jpg',
+  }
 ]

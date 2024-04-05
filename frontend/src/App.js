@@ -1,15 +1,17 @@
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import RecipesPage from './pages/RecipesPage';
 import BasicTable from "./components/IngredientsList";
-
+import Navigation from "./components/Navigation";
 function App() {
 
   // PATHS  
   const ROOT = "/"; // the recipes page
   const INGREDIENTS = "/ingredients";
   const RECIPE = "/recipe:id"
+
+  const [value, setValue] = useState(0);
 
 
   
@@ -42,11 +44,12 @@ function App() {
     <>
     <Router>
         <Routes>
-          <Route path={ROOT} element={<RecipesPage/>} />
+          <Route path={ROOT} element={<RecipesPage value={value}/>} />
           <Route path={INGREDIENTS} element={<BasicTable/>}/>   
           <Route path={RECIPE}/>
         </Routes>
       </Router>
+     <Navigation value={value} setValue={setValue}/>
     </>
   );
   // change BasicTable

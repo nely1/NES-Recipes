@@ -46,7 +46,7 @@ export default function RecipesPage(props) {
     if (props.value === 0) {
       return <RecipesList data={data} />
     }
-     if (value == 1) {
+     if (props.value == 1) {
       return <IngredientsList data={data}/>
     }
  
@@ -78,6 +78,7 @@ export default function RecipesPage(props) {
       {displayRecipes()}
       
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+      </Paper>
     </Box>
   );
 }

@@ -1,12 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
 import {useEffect} from "react"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import RecipesPage from './pages/RecipesPage';
 
 function App() {
 
+  // PATHS  
   const ROOT = "/"; // the recipes page
   const INGREDIENTS = "/ingredients";
   const RECIPE = "/recipe:id"
+
+
+  
+
+
 
   // useEffect(() => {
   //   fetch("http://localhost:8000/get-all").then(res => res.json()).then(data => {console.log(data)});
@@ -32,11 +39,13 @@ function App() {
     //   </header>
     // </div>
     <>
-      <Routes>
-        <Route path={ROOT} />
-        <Route path={INGREDIENTS}/>  
-        <Route path={RECIPE}/>
-      </Routes>
+    <Router>
+        <Routes>
+          <Route path={ROOT} element={<RecipesPage/>} />
+          <Route path={INGREDIENTS}/>  
+          <Route path={RECIPE}/>
+        </Routes>
+      </Router>
     </>
   );
 }

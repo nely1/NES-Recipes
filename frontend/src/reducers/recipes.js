@@ -4,7 +4,7 @@ const recipesReducer = (recipes = [], action) => {
             return action.payload;
         
         case "POST_RECIPE":
-            return action.payload;
+            return recipes;
         default:
             return recipes;
         }

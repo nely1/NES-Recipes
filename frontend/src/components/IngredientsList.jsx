@@ -31,44 +31,12 @@ const columns = [
 
 ];
 
-<<<<<<< Updated upstream
-function createData(name, amount) {
-  return { name, amount};
-}
-
-const rows = [
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-  createData('Tomato', 2),
-  createData('Potato', 4),
-];
-
-=======
->>>>>>> Stashed changes
 export default function IngredientsList(props) {
   const [value, setValue] = React.useState(0);
   const [rows, setRows] = React.useState([]);
   const [newIngredient, setNewIngredient] = React.useState({ name: '', amount: 0 });
   const [open, setOpen] = React.useState(false);
 
-<<<<<<< Updated upstream
-=======
   React.useEffect(() => {
     // Map initial data to rows when props.data changes
     setRows(props.data.map(({ name, amount }) => ({ name, amount })));
@@ -106,7 +74,6 @@ export default function IngredientsList(props) {
     setNewIngredient({ ...newIngredient, [e.target.name]: e.target.value });
   };
 
->>>>>>> Stashed changes
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -191,23 +158,6 @@ export default function IngredientsList(props) {
               })}
           </TableBody>
         </Table>
-<<<<<<< Updated upstream
-      </TableContainer>
-
-       <BottomNavigation
-          sx={{position: 'fixed', bottom: 0, right: 0, left:0}}
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        >
-          <BottomNavigationAction label="Recipes" icon={<RestoreIcon />} value={0}/>
-          <BottomNavigationAction label="Ingredients" icon={<FavoriteIcon />}  value={1}/>
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />}  value={2}/>
-        </BottomNavigation>
-      
-=======
       </TableContainer>     
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add New Ingredient</DialogTitle>
@@ -242,7 +192,6 @@ export default function IngredientsList(props) {
           <Button onClick={handleSave}>Save</Button>
         </DialogActions>
       </Dialog> 
->>>>>>> Stashed changes
     </Box>
   );
 }

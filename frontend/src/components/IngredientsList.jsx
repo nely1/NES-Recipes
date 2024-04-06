@@ -23,7 +23,7 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { postIngredient } from "../actions/ingredients";
+import { postIngredient, updateIngredient } from "../actions/ingredients";
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170, align: 'center'},
@@ -42,19 +42,20 @@ export default function IngredientsList(props) {
 
   React.useEffect(() => {
     // Map initial data to rows when props.data changes
+    
     setRows(props.data.map(({ name, amount }) => ({ name, amount })));
   }, [props.data]); // Run this effect whenever props.data changes
 
 
   const handleAddButtonClick = (index) => {
     const updatedRows = [...rows];
-    updatedRows[index].amount = parseInt(updatedRows[index].amount, 10) + 1;
+    dispatch(updateIngredient({"name": updatedRows[index].name, "amount": 1}))
     setRows(updatedRows);
   };
 
   const handleMinusButtonClick = (index) => {
     const updatedRows = [...rows];
-    updatedRows[index].amount = parseInt(updatedRows[index].amount, 10) - 1;
+    dispatch(updateIngredient({"name": updatedRows[index].name, "amount": -1}))
     setRows(updatedRows);
   };
 
@@ -76,8 +77,6 @@ export default function IngredientsList(props) {
     setOpen(false);
 
   };
-
-
 
   const handleChange = (e) => {
     setNewIngredient({ ...newIngredient, [e.target.name]: e.target.value });

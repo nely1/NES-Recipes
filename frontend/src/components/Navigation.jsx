@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import SetMealIcon from '@mui/icons-material/SetMeal';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -28,9 +28,9 @@ export default function Navigation(props) {
             props.setValue(newValue);
           }}
         >
-          <BottomNavigationAction label="Recipes" icon={<RestoreIcon />} value={0}/>
-          <BottomNavigationAction label="Ingredients" icon={<FavoriteIcon />}  value={1}/>
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />}  value={2}/>
+          <BottomNavigationAction label="Recipes" icon={<RestaurantMenuIcon />} value={0}/>
+          <BottomNavigationAction label="Ingredients" icon={<SetMealIcon />}  value={1}/>
+          <BottomNavigationAction label="Record" icon={<ReceiptLongIcon />}  value={2}/>
         </BottomNavigation>
       </Paper>
     )

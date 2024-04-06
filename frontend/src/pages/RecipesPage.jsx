@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import RecipesList from '../components/RecipesList';
 import IngredientsList from '../components/IngredientsList';
 import { getRecipes } from "../actions/recipes";
+import { getIngredients } from "../actions/ingredients";
 import UploadPage from './RecipeCreationPage';
 
 function refreshData(value) {
@@ -27,6 +28,7 @@ export default function RecipesPage(props) {
 
   const dispatch = useDispatch();
   const recipes = useSelector((state) => state?.recipes);
+  const ingredients = useSelector((state) => state?.ingredients);
   const [data, setData] = useState(() => refreshData(props.value));
 
 
@@ -36,7 +38,7 @@ export default function RecipesPage(props) {
       return <RecipesList data={recipes} />
     }
      if (props.value == 1) {
-      return <IngredientsList data={data}/>
+      return <IngredientsList data={ingredients}/>
     }
  
     else if (props.value === 2) {
@@ -49,6 +51,7 @@ export default function RecipesPage(props) {
 
   useEffect(() => {
     dispatch(getRecipes());
+    dispatch(getIngredients());
     ref.current.ownerDocument.body.scrollTop = 0;
     setData(refreshData(props.value));
   }, [props.value, setData]);

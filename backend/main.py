@@ -6,7 +6,6 @@ from db import db
 from PIL import Image
 import io
 import matplotlib.pyplot as plt
-import base64
 
 # Create Flask app to connect front-end, back-end, and database
 app = Flask(__name__)
@@ -17,7 +16,7 @@ CORS(app)
 def flask_mongodb_atlas():
     return "Hello World"
 
-@app.route("/add", methods = ["POST"] )
+@app.route("/add-ingredient", methods = ["POST"] )
 def insert_ingredient(name = None, amount = None):
     ## Fetch data from request or function invokation
     if name is not None and amount is not None:
@@ -40,14 +39,14 @@ def insert_ingredient(name = None, amount = None):
     ingredient["_id"] = str(ingredient["_id"])
     return json.dumps(ingredient)
 
-@app.route("/update")
+@app.route("/update-ingredient", methods=["POST"])
 def update_ingredient(name = None, amount = None):
     ## Fetch data from request or function invokation
     if name is not None and amount is not None:
         ingredient = {"name": name, "amount": amount}
-    
-    # data = request.get_json()
-    ingredient = {"name": "tomato", "amount": 10}
+    else:
+        ingredient = request.get_json()
+        print(ingredient)
 
     query = {
         "name": ingredient["name"]
@@ -61,7 +60,7 @@ def update_ingredient(name = None, amount = None):
         return "Ingredient not found, creating new entry...{}".format(result)
 
     # Update quantities
-    ingredient["amount"] += found_ingredient["amount"]
+    ingredient["amount"] += int(found_ingredient["amount"])
     updated_ingredient = {"$set": ingredient}
     result = db.ingredient.update_one(query, updated_ingredient)
     return json.dumps(ingredient)
